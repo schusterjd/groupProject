@@ -1,1 +1,16 @@
+// Created/revised by the group of Pedro, Jaden, Shane on 12/03/2017.
+// place your edits to project here
+// copy and paste the text in this file into Microsoft Visual Studio to build/debug
 
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <iomanip>
+using namespace std;
+
+int main()
+{
+	
+	return 0;
+}
