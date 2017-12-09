@@ -9,8 +9,237 @@
 #include <iomanip>
 using namespace std;
 
+// Function prototypes
+double getEdit(string input);
+double getBody();
+void displayError(bool &error, string word);
+
+// Begin main function
 int main()
 {
-	
-	return 0;
-}
+	// Declare variables
+	string gravity = "";
+	double gravOther = 0.0;
+	double weightEarth = 0.0;
+
+	// Enter data
+	while (weightEarth <= 0.0)
+	{
+		cout << "Enter your weight: ";
+		getline(cin, gravity);
+		weightEarth = getEdit(gravity);
+	} //end while
+	while (gravOther <= 0.0)
+	{
+		gravOther = getBody();
+	} //end while
+
+	// Display data
+	cout << weightEarth << endl;
+	cout << gravOther << endl;
+
+    return 0;
+} //end of main
+
+// Function definitions
+double getEdit(string input)
+{
+	// Declare variables
+	int sub = 0;
+	string currentChar = "";
+	int count = 0;
+	bool redo = false;
+	double result = 0.0;
+	bool error = false;
+	string choice = "";
+	bool correct = false;
+
+	// Editing
+	while (sub < input.length())
+	{
+		currentChar = input.substr(sub, 1);
+		if ((currentChar >= "0" && currentChar <= "9") || currentChar == ".")
+		{
+			if (currentChar == ".")
+			{
+				count += 1;
+			} //end if
+			sub += 1;
+		}
+		else
+		{
+			input.erase(sub, 1);
+			error = true;
+		} //end if
+	} //end while
+	sub = 0;
+	if (count > 1)
+	{
+		if (count == 2 && input.substr(input.length() - 1, 1) == ".")
+		{
+			input.erase(input.length() - 1, 1);
+			count = 1;
+		}
+		else
+		{
+			redo = true;
+		} //end if
+		if (count > 1)
+		{
+			redo = true;
+		} //end if
+	} //end if
+	if (input.length() == 1 && input == ".")
+	{
+		redo = true;
+	} //end if
+	if (input.length() == 0)
+	{
+		redo = true;
+	} //end if
+	if (redo == true)
+	{
+		input = "0.0";
+		cout << "Invalid data!!!" << endl << "Please re-enter data." << endl;
+	} //end if
+	if (redo == false && error == true)
+	{
+			cout << "Invalid character detected! Please verify number." << endl << input << endl << "Enter 'Y' if this number is correct or 'N' if the number is wrong: ";
+			while (correct == false)
+			{
+				getline(cin, choice);
+				if ("Y" == choice || "y" == choice)
+				{
+					cout << "'Y' has been selected. Continuing program." << endl;
+					correct = true;
+				}
+				else
+				{
+					if ("N" == choice || "n" == choice)
+					{
+						cout << "'N' has been selected. Please re-enter data." << endl;
+						correct = true;
+						input = "0.0";
+					}
+					else
+					{
+						cout << "'"<< choice << "'" << " is not an opption!" << endl << "Please enter 'Y' if the number was correct or 'N' if the number was wrong: ";
+					} //end if
+				} //end if
+			} //end while
+	} //end if
+	result = stod(input);
+	return result;
+} //end of getEdit
+double getBody()
+{
+	// Declare variables
+	double gravity = 0.0;
+	string body = "";
+	double planets[8][2] = { { 0 /*Mercury*/, 3.59 },{ 1 /*Venus*/, 8.872 },{ 2 /*Earth*/, 9.80665 },{ 3 /*Mars*/, 3.7 },{ 4 /*Jupiter*/, 24.79 },{ 5 /*Saturn*/, 10.445 },
+		{ 6 /*Uranus*/, 8.69 },{ 7 /*Neptune*/, 11.15 } };
+	double satellites[5][2] = { { 0 /*Ganymede*/, 1.428 },{ 1 /*Titan*/, 1.354 },{ 2 /*Callisto*/, 1.23603 },{ 3 /*Io*/, 1.797 },{ 4 /*Luna*/, 1.625 } };
+	int sub = 0;
+	bool redo = false;
+
+	cout << endl << "Select an option:" << endl << "1  planet" << endl << "2  satellite" << endl;
+	do //begin do while
+	{
+		getline(cin, body);
+		if (body.length() != 0 && body.length() <= 1)
+		{
+			if (body == "1")
+			{
+				redo = false;
+				cout << "Select a Planet:" << endl
+					 << "1  Mercury" << endl
+					 << "2  Venus" << endl
+					 << "3  Earth" << endl
+					 << "4  Mars" << endl
+					 << "5  Jupiter" << endl
+					 << "6  Saturn" << endl
+					 << "7  Uranus" << endl
+					 << "8  Neptune" << endl;
+				do //begin do while
+				{
+					getline(cin, body);
+					if (body.length() != 0 && body.length() <= 1)
+					{
+						if (body >= "1" && body <= "8")
+						{
+							sub = 0;
+							while (planets[sub][0] != stod(body) - 1)
+							{
+								sub += 1;
+							} //end while
+							gravity = planets[sub][1];
+							redo = false;
+						}
+						else
+						{
+							displayError(redo, body);
+						} //end if
+					}
+					else
+					{
+						displayError(redo, body);
+					} //end if
+				} while (redo == true);
+			}
+			else
+			{
+				if (body== "2")
+				{
+					redo = false;
+					cout << "Select a satellite:" << endl
+						 << "1  Ganymede" << endl
+						 << "2  Titan" << endl
+						 << "3  Callisto" << endl
+						 << "4  Io" << endl
+						 << "5  Luna" << endl;
+					do //end do while
+					{
+						getline(cin, body);
+						if (body.length() != 0 && body.length() <= 1)
+						{
+							if (body >= "1" && body <= "5")
+							{
+								sub = 0;
+								while (satellites[sub][0] != stod(body) -1)
+								{
+									sub += 1;
+								} //end while
+								gravity = satellites[sub][1];
+								redo = false;
+							}
+							else
+							{
+								displayError(redo, body);
+							} //end if
+						}
+						else
+						{
+							displayError(redo, body);
+						} //end if
+					} while (redo == true);
+
+				}
+				else
+				{
+					displayError(redo, body);
+				} //end if
+			} //end if
+		}
+		else
+		{
+			displayError(redo, body);
+		} //end if
+	} while (redo == true);
+  return gravity;
+} //end of getBody
+void displayError(bool &error, string word)
+{
+	cout << "Error!!!" << endl;
+	cout << "'" << word << "'" << " is not an option. Please re-enter numbers." << endl;
+	error = true;
+} //end of displayError
